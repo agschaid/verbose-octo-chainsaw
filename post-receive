@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ -z "$GIT_PUSH_OPTION_0" ]
+then
+    echo "ERROR: dude! you need to send me a push option"
+    exit 42
+fi
+
+git checkout master
+git merge $GIT_PUSH_OPTION_0
+
+if [ $? -eq 0 ]
+then
+    echo "it was nice syncing with you"
+else
+    git merge --abort
+    echo "ERROR: can't merge $GIT_PUSH_OPTION_0 to master. Please merge and fix localy"
+    exit 111
+fi
