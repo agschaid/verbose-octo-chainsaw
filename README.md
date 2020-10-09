@@ -19,5 +19,5 @@ TODO use full sentences and stuff
 Yes.
 
 ## TODOs
-- fail early if GIT\_PUSH\_OPTION\_0 is missing
 - write user script
+- block pushes with multpile branches (the post-receive script can't handle them)

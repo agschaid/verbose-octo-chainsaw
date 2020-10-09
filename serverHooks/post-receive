@@ -1,11 +1,6 @@
 #!/bin/bash
 
-if [ -z "$GIT_PUSH_OPTION_0" ]
-then
-    echo "ERROR: dude! you need to send me a push option"
-    exit 42
-fi
-
+# we checked that there is an option in the pre-receive hook
 WORK_DIR="clients/$GIT_PUSH_OPTION_0"
 
 mkdir -p $WORK_DIR
