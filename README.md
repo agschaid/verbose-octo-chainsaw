@@ -20,4 +20,3 @@ Yes.
 
 ## TODOs
 - write user script
-- block pushes with multpile branches (the post-receive script can't handle them)

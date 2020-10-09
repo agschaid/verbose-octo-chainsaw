@@ -1,19 +1,36 @@
 #!/bin/bash
 
-# we checked that there is an option in the pre-receive hook
-WORK_DIR="clients/$GIT_PUSH_OPTION_0"
+FAILED_COUNT=0
 
-mkdir -p $WORK_DIR
+while read oldrev newrev refname
+do
+    BRANCH=$(git rev-parse --symbolic --abbrev-ref $refname)
+    WORK_DIR="clientbranches/$GIT_PUSH_OPTION_0"
 
-git --work-tree=$WORK_DIR checkout -f
-git --work-tree=$WORK_DIR checkout master
-git --work-tree=$WORK_DIR merge $GIT_PUSH_OPTION_0
+    mkdir -p $WORK_DIR
 
-if [ $? -eq 0 ]
+    git --work-tree=$WORK_DIR checkout -f
+    git --work-tree=$WORK_DIR checkout master
+    git --work-tree=$WORK_DIR merge $BRANCH
+
+
+    if [ $? -eq 0 ]
+    then
+        echo "merged $BRANCH"
+    else
+        ((FAILED_COUNT++))
+        git --work-tree=$WORK_DIR merge --abort
+        echo "ERROR: can't merge $BRANCH to master."
+    fi
+done
+
+if [ $FAILED_COUNT -eq 0 ]
 then
     echo "it was nice syncing with you"
 else
-    git --work-tree=$WORK_DIR merge --abort
-    echo "ERROR: can't merge $GIT_PUSH_OPTION_0 to master. Please merge and fix localy"
+    echo "Please merge the failed branches localy"
     exit 111
 fi
+
+
+
