@@ -6,14 +6,19 @@ then
     exit 42
 fi
 
-git checkout master
-git merge $GIT_PUSH_OPTION_0
+WORK_DIR="clients/$GIT_PUSH_OPTION_0"
+
+mkdir -p $WORK_DIR
+
+git --work-tree=$WORK_DIR checkout -f
+git --work-tree=$WORK_DIR checkout master
+git --work-tree=$WORK_DIR merge $GIT_PUSH_OPTION_0
 
 if [ $? -eq 0 ]
 then
     echo "it was nice syncing with you"
 else
-    git merge --abort
+    git --work-tree=$WORK_DIR merge --abort
     echo "ERROR: can't merge $GIT_PUSH_OPTION_0 to master. Please merge and fix localy"
     exit 111
 fi
