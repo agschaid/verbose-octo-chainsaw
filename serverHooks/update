@@ -1,0 +1,4 @@
+[ "$1" != refs/heads/master ] || {
+    echo "ERROR:  I am sorry, Dave. I am afraid I can't let you push to master." >&2
+    exit 1
+}
