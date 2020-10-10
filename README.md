@@ -7,8 +7,6 @@ Might not work for you. Hell, it might not even work for me. I'll tell you when 
 
 ## SETUP
 
-TODO use full sentences and stuff
-
 ### SERVER
 - `git init --bare txt.git`
 - Copy contents of serverhooks/ to txt.git/hooks/
@@ -23,4 +21,5 @@ Yes.
 ## TODOs
 - also push if local branch not the same as remote branch
 - a little documentation about userScripts usage
+- better documentation in general
 
