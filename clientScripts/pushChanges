@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ ! -z "$OCTO_CHAINSAW_DIR" ]
+then
+    cd $OCTO_CHAINSAW_DIR
+fi
+
+if [ -f ".octo_chainsaw_lock" ]
+then
+    echo ".octo_chainsaw_lock exists. Stopping."
+    exit 1
+fi
+
+if [ -n $(git status -s) ]
+then
+    echo "repo is clean. Not pushing changes"
+    exit 2
+fi
+
+BRANCH_NAME=$(git symbolic-ref -q HEAD)
+BRANCH_NAME=${BRANCH_NAME##refs/heads/}
+BRANCH_NAME=${BRANCH_NAME:-HEAD}
+
+git add .
+git commit -m "$BRANCH_NAME : $(date)"
+git push
+

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ ! -z "$OCTO_CHAINSAW_DIR" ]
+then
+    cd $OCTO_CHAINSAW_DIR
+fi
+
+if [ -f ".octo_chainsaw_lock" ]
+then
+    echo ".octo_chainsaw_lock exists. Stopping."
+    exit 1
+fi
+
+git fetch
+git merge origin/master
+
+
