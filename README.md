@@ -11,7 +11,6 @@ TODO use full sentences and stuff
 
 ### SERVER
 - `git init --bare txt.git`
-- `git config receive.advertisePushOptions true`
 - Copy contents of serverhooks/ to txt.git/hooks/
 
 ### CLIENT
