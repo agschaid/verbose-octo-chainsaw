@@ -1,0 +1,34 @@
+#!/bin/bash
+
+script_path=$(dirname "$0")
+
+if [ ! -z "$OCTO_CHAINSAW_DIR" ]
+then
+    WORK_DIR=$OCTO_CHAINSAW_DIR
+else
+    WORK_DIR=$(pwd)
+fi
+
+MSG_ID="SYNC_$WORK_DIR"
+
+# run the actual script
+$script_path/sync
+
+ERROR_CODE=$?
+
+CMD=termux-notification --id $MSG_ID --alert-once --group gitsync -c "$WORK_DIR"
+
+case $ERROR_CODE in
+    111*)
+      $CMD --title "error pushing updates"
+      ;;
+    222*)
+      $CMD --title "error getting updates"
+      ;;
+    *)
+      termux-notification-remove $MSG_ID
+      ;;
+esac
+
+exit $ERROR_CODE
+
