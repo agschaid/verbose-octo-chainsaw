@@ -13,7 +13,12 @@ fi
 
 git fetch || exit $?
 
-git merge origin/master --no-edit || exit 222
+git merge origin/master --no-edit 
+if [ "$?" -ne "0" ] 
+then
+    git merge --abort
+    exit 222
+fi
 
 
 
