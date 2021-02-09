@@ -16,7 +16,7 @@ $script_path/sync
 
 ERROR_CODE=$?
 
-CMD=termux-notification --id $MSG_ID --alert-once --group gitsync -c "$WORK_DIR"
+CMD="termux-notification --id $MSG_ID --alert-once --group gitsync -c $WORK_DIR"
 
 case $ERROR_CODE in
     111*)
