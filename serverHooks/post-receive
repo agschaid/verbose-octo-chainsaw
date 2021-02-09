@@ -11,7 +11,7 @@ do
 
     git --work-tree=$WORK_DIR checkout -f
     git --work-tree=$WORK_DIR checkout master
-    git --work-tree=$WORK_DIR merge $BRANCH
+    git --work-tree=$WORK_DIR merge $BRANCH --no-edit
 
 
     if [ $? -eq 0 ]

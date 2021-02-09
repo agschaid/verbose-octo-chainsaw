@@ -11,7 +11,7 @@ then
     exit 1
 fi
 
-if [ -n $(git status -s) ]
+if [ ! -n "$(git status -s)" ]
 then
     echo "repo is clean. Not pushing changes"
     exit
@@ -23,5 +23,10 @@ BRANCH_NAME=${BRANCH_NAME:-HEAD}
 
 git add .
 git commit -m "$BRANCH_NAME : $(date)"
-git push
+ERROR_COUNT=$(git push --progress 2>&1 | tee /dev/tty | grep -c ERROR)
+
+if [ "$ERROR_COUNT" -gt "0" ]
+then
+    exit 111
+fi
 
