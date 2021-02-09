@@ -14,7 +14,7 @@ fi
 if [ -n $(git status -s) ]
 then
     echo "repo is clean. Not pushing changes"
-    exit 2
+    exit
 fi
 
 BRANCH_NAME=$(git symbolic-ref -q HEAD)

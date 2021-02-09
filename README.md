@@ -9,7 +9,7 @@ Might not work for you. Hell, it might not even work for me. I'll tell you when 
 
 ### SERVER
 - `git init --bare txt.git`
-- Copy contents of serverhooks/ to txt.git/hooks/
+- Copy contents of serverhooks/ to txt.git/hooks/ and make them executable
 
 ### CLIENT
 use clientScripts
