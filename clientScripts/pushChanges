@@ -8,25 +8,34 @@ fi
 if [ -f ".octo_chainsaw_lock" ]
 then
     echo ".octo_chainsaw_lock exists. Stopping."
-    exit 1
-fi
-
-if [ ! -n "$(git status -s)" ]
-then
-    echo "repo is clean. Not pushing changes"
-    exit
+    CODE_FROM_LOCK=$(cat .octo_chainsaw_lock)
+    if [ -z "$CODE_FROM_LOCK" ]
+    then
+        CODE_FROM_LOCK=123
+    fi
+    exit "$CODE_FROM_LOCK"
 fi
 
 BRANCH_NAME=$(git symbolic-ref -q HEAD)
 BRANCH_NAME=${BRANCH_NAME##refs/heads/}
 BRANCH_NAME=${BRANCH_NAME:-HEAD}
 
-git add .
-git commit -m "$BRANCH_NAME : $(date)"
+if [ -n "$(git status -s)" ]
+then
+    git add .
+    git commit -m "$BRANCH_NAME : $(date)"
+fi
+
+if $(git merge-base --is-ancestor $BRANCH_NAME origin/$BRANCH_NAME); then
+    echo "local branch is clean. Not pushing"
+    exit
+fi
+
 ERROR_COUNT=$(git push --progress 2>&1 | tee /dev/tty | grep -c ERROR)
 
 if [ "$ERROR_COUNT" -gt "0" ]
 then
+    echo 111 > .octo_chainsaw_lock
     exit 111
 fi
 

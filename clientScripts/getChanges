@@ -8,7 +8,12 @@ fi
 if [ -f ".octo_chainsaw_lock" ]
 then
     echo ".octo_chainsaw_lock exists. Stopping."
-    exit 1
+    CODE_FROM_LOCK=$(cat .octo_chainsaw_lock)
+    if [ -z "$CODE_FROM_LOCK" ]
+    then
+        CODE_FROM_LOCK=123
+    fi
+    exit "$CODE_FROM_LOCK"
 fi
 
 git fetch || exit $?
@@ -17,6 +22,7 @@ git merge origin/master --no-edit
 if [ "$?" -ne "0" ] 
 then
     git merge --abort
+    echo 222 > .octo_chainsaw_lock
     exit 222
 fi
 
