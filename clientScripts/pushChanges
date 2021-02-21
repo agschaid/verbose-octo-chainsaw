@@ -20,11 +20,38 @@ BRANCH_NAME=$(git symbolic-ref -q HEAD)
 BRANCH_NAME=${BRANCH_NAME##refs/heads/}
 BRANCH_NAME=${BRANCH_NAME:-HEAD}
 
-if [ -n "$(git status -s)" ]
-then
-    git add .
-    git commit -m "$BRANCH_NAME : $(date)"
-fi
+git status --porcelain | while read DIRTY_LINE ; # using xargs to trim whitespace
+  do
+    DIRTY_FILE=$(echo $DIRTY_LINE | cut -d' ' -f2-)
+    STATUS_INDICATOR=$(echo $DIRTY_LINE | cut -d' ' -f-1)
+    case $STATUS_INDICATOR in
+        "??")
+            CMD="add"
+            LOG_ACTION="ADDED"
+            ;;
+        "M")
+            CMD="add"
+            LOG_ACTION="CHANGED"
+            ;;
+        "D")
+            CMD="rm"
+            LOG_ACTION="DELETED"
+            ;;
+        *)
+            echo "unknown git file status $STATUS_INDICATOR"
+            echo 111 > .octo_chainsaw_lock
+            exit 111
+            ;;
+    esac
+    eval "git $CMD $DIRTY_FILE"
+    git commit -m "[$BRANCH_NAME] $(date +"%Y-%m-%d %H:%M") $LOG_ACTION $DIRTY_FILE"
+  done
+
+#if [ -n "$(git status -s)" ]
+#then
+#    git add .
+#    git commit -m "$BRANCH_NAME : $(date)"
+#fi
 
 if $(git merge-base --is-ancestor $BRANCH_NAME origin/$BRANCH_NAME); then
     echo "local branch is clean. Not pushing"
