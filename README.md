@@ -3,13 +3,15 @@ a little backup setup for textfiles using git
 
 I am cooking up a little git-based text file backup system that basically consists only of a local script and a remote git-hook.
 
-Might not work for you. Hell, it might not even work for me. I'll tell you when I know.
+Might not work for you. Hell, it might not even work for me. I'll tell you when I know. (*Update two years later: yes. It works for me. Better documentation to come*)
 
 ## SETUP
 
 ### SERVER
+
 - `git init --bare txt.git`
-- Copy contents of serverhooks/ to txt.git/hooks/ and make them executable
+- configure an email and a name for that repo. I, for one, use "server@tct.git" and "txt server"
+- Copy contents of serverhooks/ to txt.git/hooks/ and make them executable or just set a symbolic link to there
 
 ### CLIENT
 use clientScripts
