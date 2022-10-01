@@ -5,6 +5,11 @@ then
     cd $OCTO_CHAINSAW_DIR
 fi
 
+if [ ! -z "$OCTO_CHAINSAW_ORIGIN" ]
+then
+    echo "using git origin '$OCTO_CHAINSAW_ORIGIN' to get changes"
+fi
+
 if [ -f ".octo_chainsaw_lock" ]
 then
     echo ".octo_chainsaw_lock exists. Stopping."
@@ -16,7 +21,7 @@ then
     exit "$CODE_FROM_LOCK"
 fi
 
-git fetch || exit $?
+git fetch $OCTO_CHAINSAW_ORIGIN || exit $?
 
 git merge origin/master --no-edit 
 if [ "$?" -ne "0" ] 

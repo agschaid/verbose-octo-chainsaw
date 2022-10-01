@@ -5,6 +5,11 @@ then
     cd $OCTO_CHAINSAW_DIR
 fi
 
+if [ ! -z "$OCTO_CHAINSAW_ORIGIN" ]
+then
+    echo "using git origin '$OCTO_CHAINSAW_ORIGIN' to get changes"
+fi
+
 if [ -f ".octo_chainsaw_lock" ]
 then
     echo ".octo_chainsaw_lock exists. Stopping."
@@ -58,7 +63,7 @@ if $(git merge-base --is-ancestor $BRANCH_NAME origin/$BRANCH_NAME); then
     exit
 fi
 
-ERROR_COUNT=$(git push --progress 2>&1 | tee /dev/tty | grep -c ERROR)
+ERROR_COUNT=$(git push $OCTO_CHAINSAW_ORIGIN --progress 2>&1 | tee /dev/tty | grep -c ERROR)
 
 if [ "$ERROR_COUNT" -gt "0" ]
 then
