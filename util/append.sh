@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# TODO add support for retries
 sleeptime=10s
 maxtries=8
 
@@ -14,7 +15,7 @@ cd $base_path
 
 "${client_script_dir}/getChanges"
 
-echo "writing to file"
+echo "appending to file..."
 echo "${text}" >> $file_name
 
 "${client_script_dir}/pushChanges"
