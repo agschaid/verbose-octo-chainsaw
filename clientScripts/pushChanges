@@ -7,7 +7,7 @@ fi
 
 if [ ! -z "$OCTO_CHAINSAW_ORIGIN" ]
 then
-    echo "using git origin '$OCTO_CHAINSAW_ORIGIN' to get changes"
+    echo "using git origin '$OCTO_CHAINSAW_ORIGIN' to push changes"
 fi
 
 if [ -f ".octo_chainsaw_lock" ]
@@ -24,10 +24,16 @@ fi
 BRANCH_NAME=$(git symbolic-ref -q HEAD)
 BRANCH_NAME=${BRANCH_NAME##refs/heads/}
 BRANCH_NAME=${BRANCH_NAME:-HEAD}
+# `git status --porcelain` does not output relative paths. So in case we call
+# this script from somewhere else than the working tree root we need to fix
+# the paths.
+# Will be empty if we are allready on root.
+WORK_TREE_ROOT=$(git rev-parse --show-cdup)
 
 git status --porcelain | while read DIRTY_LINE ; # using xargs to trim whitespace
   do
-    DIRTY_FILE=$(echo $DIRTY_LINE | cut -d' ' -f2-)
+    DIRTY_FILE="${WORK_TREE_ROOT}$(echo $DIRTY_LINE | cut -d' ' -f2-)"
+    
     STATUS_INDICATOR=$(echo $DIRTY_LINE | cut -d' ' -f-1)
     case $STATUS_INDICATOR in
         "??")
@@ -48,6 +54,8 @@ git status --porcelain | while read DIRTY_LINE ; # using xargs to trim whitespac
             exit 111
             ;;
     esac
+    location= eval "pwd"
+    echo "running 'git $CMD $DIRTY_FILE'"
     eval "git $CMD $DIRTY_FILE"
     git commit -m "[$BRANCH_NAME] $(date +"%Y-%m-%d %H:%M") $LOG_ACTION $DIRTY_FILE"
   done

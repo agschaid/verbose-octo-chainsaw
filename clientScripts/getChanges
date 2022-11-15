@@ -21,8 +21,10 @@ then
     exit "$CODE_FROM_LOCK"
 fi
 
+echo "fetching $OCTO_CHAINSAW_ORIGIN"
 git fetch $OCTO_CHAINSAW_ORIGIN || exit $?
 
+echo "merging master"
 git merge origin/master --no-edit 
 if [ "$?" -ne "0" ] 
 then
