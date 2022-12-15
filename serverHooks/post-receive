@@ -29,7 +29,7 @@ then
     echo "it was nice syncing with you"
 else
     echo "Please merge the failed branches localy"
-    exit 111
+    exit 444
 fi
 
 

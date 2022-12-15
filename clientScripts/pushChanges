@@ -75,7 +75,7 @@ ERROR_COUNT=$(git push $OCTO_CHAINSAW_ORIGIN --progress 2>&1 | tee /dev/tty | gr
 
 if [ "$ERROR_COUNT" -gt "0" ]
 then
-    echo 111 > .octo_chainsaw_lock
-    exit 111
+    echo 333 > .octo_chainsaw_lock
+    exit 333
 fi
 

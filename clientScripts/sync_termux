@@ -20,10 +20,13 @@ CMD="termux-notification --id $MSG_ID --alert-once --group gitsync -c $WORK_DIR"
 
 case $ERROR_CODE in
     111*)
-      $CMD --title "error pushing updates"
+      $CMD --title "error collecting local changes"
       ;;
     222*)
       $CMD --title "error getting updates"
+      ;;
+    333*)
+      $CMD --title "error pushing updates"
       ;;
     *)
       termux-notification-remove $MSG_ID
