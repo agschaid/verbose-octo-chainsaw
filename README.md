@@ -76,8 +76,5 @@ See [this issue](https://github.com/termux/termux-app/issues/2366) for details a
 Yes.
 
 ## TODOs
-- also push if local branch not the same as remote branch
-- a little documentation about userScripts usage
-- better documentation in general
 - switch from origin/master to origin/main
 
