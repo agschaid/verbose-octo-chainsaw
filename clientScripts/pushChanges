@@ -30,7 +30,7 @@ BRANCH_NAME=${BRANCH_NAME:-HEAD}
 # Will be empty if we are allready on root.
 WORK_TREE_ROOT=$(git rev-parse --show-cdup)
 
-git status --porcelain | while read DIRTY_LINE ; # using xargs to trim whitespace
+git -c core.quotePath=off status --porcelain | while read DIRTY_LINE ; # turning off quotePath so Umlauts are displayed correctly
   do
     DIRTY_FILE="${WORK_TREE_ROOT}$(echo $DIRTY_LINE | cut -d' ' -f2-)"
     
