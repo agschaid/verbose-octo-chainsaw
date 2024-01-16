@@ -64,7 +64,7 @@ git -c core.quotePath=off status --porcelain | while read -r DIRTY_LINE ;
     esac
     location= eval "pwd"
     echo "running 'git $CMD $DIRTY_FILE'"
-    eval "git $CMD $DIRTY_FILE"
+    eval "git $CMD \"$DIRTY_FILE\""
     git commit -m "[$BRANCH_NAME] $(date +"%Y-%m-%d %H:%M") $LOG_ACTION $DIRTY_FILE"
   done
 
