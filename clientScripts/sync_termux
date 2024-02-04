@@ -12,7 +12,7 @@ fi
 MSG_ID="SYNC_$WORK_DIR"
 
 # run the actual script
-$script_path/sync
+$script_path/sync "$@"
 
 ERROR_CODE=$?
 
@@ -28,8 +28,11 @@ case $ERROR_CODE in
     333*)
       $CMD --title "error pushing updates"
       ;;
-    *)
+    0*)
       termux-notification-remove $MSG_ID
+      ;;
+    *)
+      $CMD --title "unknown errorcode $ERROR_CODE"
       ;;
 esac
 

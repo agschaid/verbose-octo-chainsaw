@@ -1,5 +1,17 @@
 #!/bin/bash
 
+while getopts 'lha:' OPTION; do
+    case "$OPTION" in
+        l)
+            IGNORE_LOCK=1
+            ;;
+        ?) 
+            echo "unknown option"
+            exit 42
+            ;;
+    esac
+done
+
 if [ ! -z "$OCTO_CHAINSAW_DIR" ]
 then
     cd $OCTO_CHAINSAW_DIR
@@ -12,13 +24,18 @@ fi
 
 if [ -f ".octo_chainsaw_lock" ]
 then
-    echo ".octo_chainsaw_lock exists. Stopping."
-    CODE_FROM_LOCK=$(cat .octo_chainsaw_lock)
-    if [ -z "$CODE_FROM_LOCK" ]
+    if [ -n "$IGNORE_LOCK" ]
     then
-        CODE_FROM_LOCK=123
+        echo "ignoring lock"
+    else
+        echo ".octo_chainsaw_lock exists. Stopping."
+        CODE_FROM_LOCK=$(cat .octo_chainsaw_lock)
+        if [ -z "$CODE_FROM_LOCK" ]
+        then
+            CODE_FROM_LOCK=123
+        fi
+        exit "$CODE_FROM_LOCK"
     fi
-    exit "$CODE_FROM_LOCK"
 fi
 
 echo "fetching $OCTO_CHAINSAW_ORIGIN"

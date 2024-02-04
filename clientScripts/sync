@@ -1,5 +1,45 @@
 #!/bin/bash
 
+while getopts 'lha:' OPTION; do
+    case "$OPTION" in
+        a)
+            ATTEMPTS_THRESHOLD="$OPTARG"
+            ;;
+        ?) 
+            echo "unknown option"
+            exit 42
+            ;;
+    esac
+done
+
 script_path=$(dirname "$0")
 
-$script_path/pushChanges && $script_path/getChanges
+if [ -f ".octo_chainsaw_lock" ]
+then
+    echo ".octo_chainsaw_lock exists."
+    if [ -n "$ATTEMPTS_THRESHOLD" ]
+    then
+        date >> .octo_chainsaw_attempts
+        ATTEMPTS_COUNT=$( cat .octo_chainsaw_attempts | wc -l )
+        if [ $ATTEMPTS_COUNT -gt $ATTEMPTS_THRESHOLD ]
+        then
+            IGNORE_LOCK=1
+            rm .octo_chainsaw_attempts
+        fi
+    fi
+
+    if [ -n "$IGNORE_LOCK" ]
+    then
+        echo "Retrying . . ."
+    else
+        echo "Stopping."
+        CODE_FROM_LOCK=$(cat .octo_chainsaw_lock)
+        if [ -z "$CODE_FROM_LOCK" ]
+        then
+            CODE_FROM_LOCK=123
+        fi
+        exit "$CODE_FROM_LOCK"
+    fi
+fi
+
+$script_path/pushChanges -l && $script_path/getChanges -l && rm -f .octo_chainsaw_lock .octo_chainsaw_attempts
