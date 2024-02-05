@@ -31,6 +31,9 @@ case $ERROR_CODE in
     0*)
       termux-notification-remove $MSG_ID
       ;;
+    128*)
+      echo "looks like git fetch failed. Ignoring."
+      ;;
     *)
       $CMD --title "unknown errorcode $ERROR_CODE"
       ;;
