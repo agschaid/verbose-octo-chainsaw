@@ -16,7 +16,7 @@ cd $base_path
 "${client_script_dir}/getChanges"
 
 echo "appending to file..."
-echo "${text}" >> $file_name
+echo -e "${text}" >> $file_name
 
 "${client_script_dir}/pushChanges"
 
