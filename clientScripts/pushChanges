@@ -17,6 +17,9 @@ then
     cd $OCTO_CHAINSAW_DIR
 fi
 
+# always go to base dir, so we search for lock_files there and put them there
+cd $(git rev-parse --show-toplevel)
+
 if [ ! -z "$OCTO_CHAINSAW_ORIGIN" ]
 then
     echo "using git origin '$OCTO_CHAINSAW_ORIGIN' to push changes"
