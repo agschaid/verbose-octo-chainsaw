@@ -12,6 +12,12 @@ while getopts 'lha:' OPTION; do
     esac
 done
 
+if [ ! -z "$OCTO_CHAINSAW_DIR" ]
+then
+    cd $OCTO_CHAINSAW_DIR
+fi
+
+
 script_path=$(dirname "$0")
 
 if [ -f ".octo_chainsaw_lock" ]
