@@ -16,7 +16,9 @@ cd $base_path
 "${client_script_dir}/getChanges"
 
 echo "appending to file..."
-echo -e "${text}" >> $file_name
+# TODO sometimes I do get newlines . . . sometimes I don't. You know what? I just add a newline in front of the text and then sed all newlines away. Works for me.
+echo -e "\n${text}" >> $file_name
+sed -i '/^\s*$/d' $file_name
 
 "${client_script_dir}/pushChanges"
 
